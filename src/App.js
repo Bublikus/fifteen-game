@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import FlipMove from "react-flip-move";
 import Select from "react-select";
 import { useFifteenGame } from "./useFifteenGame";
-import bgImg from "./tetris-bg.jpg";
+import bgImg from "./bg.jpg";
 import "./style.css";
 
 const levels = {
