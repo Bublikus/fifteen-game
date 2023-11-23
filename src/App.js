@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import FlipMove from 'react-flip-move';
-import Select from 'react-select';
-import { useFifteenGame } from './useFifteenGame';
-import './style.css';
+import React, { useState, useEffect } from "react";
+import FlipMove from "react-flip-move";
+import Select from "react-select";
+import { useFifteenGame } from "./useFifteenGame";
+import bgImg from "./tetris-bg.jpg";
+import "./style.css";
 
 const levels = {
   easy: {
@@ -35,7 +36,7 @@ export default function App() {
   const onSuccess = () =>
     new Promise((resolve) => {
       setTimeout(() => {
-        alert('😎 You win!');
+        alert("😎 You win!");
         resolve();
       }, ANIM_DURATION);
     });
@@ -50,10 +51,9 @@ export default function App() {
     setLevel(lev);
   };
 
-  useEffect(
-    () => setTimeout(() => setDuration(ANIM_DURATION), MIX_DURATION),
-    []
-  );
+  useEffect(() => {
+    setTimeout(() => setDuration(ANIM_DURATION), MIX_DURATION);
+  }, []);
 
   useEffect(() => {
     const checkSelectionInterval = setInterval(
@@ -66,14 +66,14 @@ export default function App() {
       document.body.style.zoom = 1;
     };
 
-    document.addEventListener('gesturestart', blockGestures);
-    document.addEventListener('gesturechange', blockGestures);
-    document.addEventListener('gestureend', blockGestures);
+    document.addEventListener("gesturestart", blockGestures);
+    document.addEventListener("gesturechange", blockGestures);
+    document.addEventListener("gestureend", blockGestures);
 
     return () => {
-      document.removeEventListener('gesturestart', blockGestures);
-      document.removeEventListener('gesturechange', blockGestures);
-      document.removeEventListener('gestureend', blockGestures);
+      document.removeEventListener("gesturestart", blockGestures);
+      document.removeEventListener("gesturechange", blockGestures);
+      document.removeEventListener("gestureend", blockGestures);
 
       clearInterval(checkSelectionInterval);
     };
@@ -82,10 +82,10 @@ export default function App() {
   return (
     <>
       {loading && <p className="loading">loading...</p>}
-      <main className={loading ? 'loading' : ''}>
+      <main className={loading ? "loading" : ""}>
         <img
           className="bg"
-          src="https://stackblitz.com/storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBMmtSQ1E9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--508ba3f1b614e749f8c574141293bb35e953f58d/tetris-bg-5.jpg"
+          src={bgImg}
           alt="bg"
           onLoad={() => setLoading(false)}
         />
@@ -105,11 +105,11 @@ export default function App() {
           </h3>
         </header>
 
-        <section style={{ '--rows': rows, '--cols': cols }}>
+        <section style={{ "--rows": rows, "--cols": cols }}>
           <FlipMove typeName={null} duration={duration} easing="ease-out">
             {cells.map((cell) => (
               <button key={cell} onClick={onCellClick.bind(null, cell)}>
-                {cell === empty ? '' : cell}
+                {cell === empty ? "" : cell}
               </button>
             ))}
           </FlipMove>
