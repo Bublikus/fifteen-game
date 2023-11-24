@@ -157,6 +157,7 @@ export function useFifteenGame(solvedCallback, config) {
     cells,
     setRows,
     setCols,
+    restart: resetGame,
     onCellClick,
   };
 }

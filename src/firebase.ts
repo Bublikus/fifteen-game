@@ -70,6 +70,7 @@ export async function addPayerToLeaderboard(player: string, time: number, level:
     const docRef = await addDoc(collection(db, "leaderboard"), {
       player,
       time,
+      level,
       date: new Date().toISOString(),
     });
     return docRef.id;

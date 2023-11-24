@@ -102,7 +102,7 @@ export default function App() {
       resolve();
     });
 
-  const { rows, cols, empty, cells, setRows, setCols, onCellClick } =
+  const { rows, cols, empty, cells, setRows, setCols, onCellClick, restart } =
     useFifteenGame(onSuccess, { rows: level.rows, cols: level.cols });
 
   const onChangeLevel = (levOption) => {
