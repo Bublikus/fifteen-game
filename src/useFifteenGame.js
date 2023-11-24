@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { InputHandler } from './InputHandler';
+import {trackGameStart} from './firebase';
 
 export function useFifteenGame(solvedCallback, config) {
   const ROWS = config?.rows || 4;
@@ -7,6 +8,7 @@ export function useFifteenGame(solvedCallback, config) {
   const empty = 0;
 
   const handlerRef = useRef();
+  const startGameTimeRef = useRef(0);
 
   const [rows, setRows] = useState(ROWS);
   const [cols, setCols] = useState(COLS);
@@ -15,6 +17,8 @@ export function useFifteenGame(solvedCallback, config) {
   const [cells, setCells] = useState(values);
 
   const resetGame = async () => {
+    startGameTimeRef.current = 0;
+
     const values = generateValues({ rows, cols, empty });
     const initial = shuffle(values, 1000);
 
@@ -28,6 +32,9 @@ export function useFifteenGame(solvedCallback, config) {
 
   const actionHandler = useCallback(
     async (action) => {
+      if (!startGameTimeRef.current) trackGameStart();
+      startGameTimeRef.current = startGameTimeRef.current || Date.now();
+
       const emptyIndex = cells.indexOf(empty);
 
       const cellIndex = {
@@ -52,8 +59,8 @@ export function useFifteenGame(solvedCallback, config) {
       setCells(newCells);
 
       if (isValidResult(newCells)) {
-        await solvedCallback?.();
-        resetGame();
+        const time = Math.floor((Date.now() - startGameTimeRef.current) / 1000);
+        await solvedCallback?.(time);
       }
     },
     [cols, rows, cells, isValidResult, solvedCallback]
@@ -92,8 +99,8 @@ export function useFifteenGame(solvedCallback, config) {
     setCells(newCells);
 
     if (isValidResult(newCells)) {
-      await solvedCallback?.();
-      resetGame();
+      const time = Math.floor((Date.now() - startGameTimeRef.current) / 1000);
+      await solvedCallback?.(time);
     }
   }
 
