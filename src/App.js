@@ -65,7 +65,7 @@ export default function App() {
 
         while (true) {
           const player = prompt(
-            `Time: ${getTime(time)}\n\nEnter your name: `,
+            `⏱️Time: ${getTime(time)}\n\nEnter your name: `,
             defaultName.current ?? undefined
           );
 
