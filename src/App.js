@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import FlipMove from "react-flip-move";
 import Select from "react-select";
 import {
@@ -6,7 +6,7 @@ import {
   addPayerToLeaderboard,
   trackGameWin,
   trackSignGame,
-} from './firebase';
+} from "./firebase";
 import { useFifteenGame } from "./useFifteenGame";
 import bgImg from "./bg.jpg";
 import "./style.css";
@@ -82,11 +82,7 @@ export default function App() {
         const playerName = promptPlayer();
 
         if (playerName) {
-          const playerId = await addPayerToLeaderboard(
-            playerName,
-            time,
-            level
-          );
+          const playerId = await addPayerToLeaderboard(playerName, time, level);
 
           localStorage.setItem("playerName", playerName);
           defaultName.current = playerName;
@@ -118,6 +114,7 @@ export default function App() {
 
   const handleRestart = () => {
     setIsShownLeaderboard(false);
+    setOwnId("");
     restart();
   };
 
@@ -191,26 +188,26 @@ export default function App() {
               <h3>Leaderboard</h3>
               <table>
                 <thead>
-                <tr>
-                  <th>Rank</th>
-                  <th>Player</th>
-                  <th>Time</th>
-                </tr>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Time</th>
+                  </tr>
                 </thead>
                 <tbody>
-                {sortedLeaders.map((leader, i) => (
-                  <tr
-                    key={leader.id}
-                    className={leader.id === ownId ? "strong" : ""}
-                  >
-                    <td>
-                      {leader.id === ownId ? "→ " : ""}
-                      {i + 1}
-                    </td>
-                    <td>{leader.player.slice(0, 20).padEnd(20, ".")}</td>
-                    <td>{getTime(leader.time)}</td>
-                  </tr>
-                ))}
+                  {sortedLeaders.map((leader, i) => (
+                    <tr
+                      key={leader.id}
+                      className={leader.id === ownId ? "strong" : ""}
+                    >
+                      <td>
+                        {leader.id === ownId ? "→ " : ""}
+                        {i + 1}
+                      </td>
+                      <td>{leader.player.slice(0, 20).padEnd(20, ".")}</td>
+                      <td>{getTime(leader.time)}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
