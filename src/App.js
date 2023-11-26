@@ -56,7 +56,7 @@ export default function App() {
       console.info(time, getTime(time));
       trackGameWin(time, level);
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 200));
 
       setIsShownLeaderboard(true);
 
