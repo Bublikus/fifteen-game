@@ -69,6 +69,8 @@ export default function App() {
 
       setIsShownLeaderboard(true);
 
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       const promptPlayer = () => {
         let playerName;
 
