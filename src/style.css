@@ -247,3 +247,48 @@ section button:empty {
   padding-bottom: 10px;
 }
 
+@media screen and (max-width: 374px) {
+  h1, h2, h3, h4, h5, h6 {
+    font-size: 14px;
+  }
+
+  h2 {
+    margin: 0 0 10px 0;
+  }
+
+  main {
+    padding: 16px;
+  }
+
+  header {
+    padding-bottom: 10px;
+  }
+
+  header h1 {
+    font-size: 18px;
+    padding-bottom: 10px;
+  }
+
+  header h3 {
+    font-size: 16px;
+    padding-bottom: 10px;
+  }
+
+  header h3 label {
+    font-size: 14px;
+  }
+
+  .leaderboard td {
+    font-size: 14px;
+  }
+
+  footer {
+    padding-top: 10px;
+    padding-bottom: 0;
+  }
+
+  footer h4 {
+    font-size: 13px;
+  }
+}
+

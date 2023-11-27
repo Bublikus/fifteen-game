@@ -20,7 +20,7 @@ export function useFifteenGame(solvedCallback, config) {
     startGameTimeRef.current = 0;
 
     const values = generateValues({ rows, cols, empty });
-    const initial = shuffle(values, 1000);
+    const initial = shuffle(values, 100000);
 
     setValues(values);
     setCells(initial);
@@ -157,6 +157,7 @@ export function useFifteenGame(solvedCallback, config) {
     cells,
     setRows,
     setCols,
+    startTime: startGameTimeRef.current,
     restart: resetGame,
     onCellClick,
   };

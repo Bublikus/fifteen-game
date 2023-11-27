@@ -40,11 +40,15 @@ export const getTime = (time) =>
   ).padStart(2, "0")}`;
 
 export default function App() {
+  const timerRef = useRef(0);
+
   const [level, setLevel] = useState(levels[Object.keys(levels)[0]]);
   const [duration, setDuration] = useState(MIX_DURATION);
   const [loading, setLoading] = useState(true);
   const [leaders, setLeaders] = useState([]);
   const [ownId, setOwnId] = useState("");
+  const [isEnd, setIsEnd] = useState(false);
+  const [time, setTime] = useState(0);
   const [isShownLeaderboard, setIsShownLeaderboard] = useState(false);
 
   const defaultName = useRef(localStorage.getItem("playerName"));
@@ -53,7 +57,7 @@ export default function App() {
 
   const onSuccess = (time) =>
     new Promise(async (resolve) => {
-      console.info(time, getTime(time));
+      setIsEnd(true);
       trackGameWin(time, level);
 
       await new Promise((resolve) => setTimeout(resolve, 200));
@@ -65,7 +69,7 @@ export default function App() {
 
         while (true) {
           const player = prompt(
-            `⏱️Time: ${getTime(time)}\n\nEnter your name: `,
+            `⏱️Time: ${getTime(time)}\n👤Enter your name: `,
             defaultName.current ?? undefined
           );
 
@@ -98,7 +102,7 @@ export default function App() {
       resolve();
     });
 
-  const { rows, cols, empty, cells, setRows, setCols, onCellClick, restart } =
+  const { rows, cols, empty, cells, setRows, setCols, onCellClick, restart, startTime } =
     useFifteenGame(onSuccess, { rows: level.rows, cols: level.cols });
 
   const onChangeLevel = (levOption) => {
@@ -108,17 +112,32 @@ export default function App() {
     setLevel(lev);
   };
 
-  useEffect(() => {
-    setTimeout(() => setDuration(ANIM_DURATION), MIX_DURATION);
-  }, []);
-
   const handleRestart = () => {
+    setIsEnd(false);
+    setTime(0);
     setIsShownLeaderboard(false);
     setOwnId("");
     restart();
   };
 
   useEffect(() => {
+    if (isEnd && startTime) {
+      clearInterval(timerRef.current);
+    } else if (startTime) {
+      timerRef.current = setInterval(() => {
+        const time = Math.floor((Date.now() - startTime) / 1000);
+        setTime(time);
+      }, 1000);
+    }
+    return () => clearInterval(timerRef.current);
+  }, [startTime, isEnd]);
+
+  useEffect(() => {
+    setTimeout(() => setDuration(ANIM_DURATION), MIX_DURATION);
+  }, []);
+
+  useEffect(() => {
+    setTime(0);
     getLeaderboard(level).then(setLeaders);
   }, [level]);
 
@@ -169,6 +188,9 @@ export default function App() {
                 onChange={onChangeLevel}
               />
             </label>
+          </h3>
+          <h3>
+            ⏱️Time: <span>{getTime(time)}</span>
           </h3>
         </header>
 
