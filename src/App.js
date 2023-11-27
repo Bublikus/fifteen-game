@@ -184,7 +184,7 @@ export default function App() {
 
         {isShownInstructions && (
           <div role="button" className="instruction" onTouchStart={() => setIsShownInstructions(false)}>
-            <h2>Sort all numbers</h2>
+            <h2>How to play</h2>
 
             <div className="instruction__images">
               <div className="instruction__image">
@@ -268,7 +268,7 @@ export default function App() {
 
         <footer>
           <strong className="help">
-            <span>Sort numbers:</span>
+            <p>Sort all numbers:</p>
             <div>
               <div>1 2 3</div>
               <div>4 5 6</div>
