@@ -301,7 +301,7 @@ section button:empty {
   padding-bottom: 10px;
   text-align: center;
   width: min-content;
-  white-space: pre-line;
+  white-space: pre;
 }
 
 .instruction .instruction__image img {
