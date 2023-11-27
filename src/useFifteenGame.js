@@ -68,7 +68,7 @@ export function useFifteenGame(solvedCallback, config) {
 
   useEffect(() => {
     handlerRef.current = (
-      handlerRef.current || new InputHandler({ swipeTickThresholdPX: 0 })
+      handlerRef.current || new InputHandler({ swipeTickThresholdPX: 100 })
     ).handleActions({
       ArrowUp: () => actionHandler('up'),
       ArrowDown: () => actionHandler('down'),

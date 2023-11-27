@@ -110,8 +110,8 @@ export class TouchGestureHandler {
     const touchMoveY = event.touches[0].clientY;
 
     const isSwiping =
-      Math.abs(touchMoveX - this.swipeStartX) > this.swipeTickThresholdPX ||
-      Math.abs(touchMoveY - this.swipeStartY) > this.swipeTickThresholdPX;
+      Math.abs(touchMoveX - this.swipeStartX) > (this.isSwiping ? this.swipeTickThresholdPX : 10) ||
+      Math.abs(touchMoveY - this.swipeStartY) > (this.isSwiping ? this.swipeTickThresholdPX : 10);
 
     if (isSwiping) {
       this.isSwiping = true;

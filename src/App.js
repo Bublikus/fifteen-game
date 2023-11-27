@@ -9,6 +9,8 @@ import {
 } from "./firebase";
 import { useFifteenGame } from "./useFifteenGame";
 import bgImg from "./bg.jpg";
+import swipeImg from "./swipe-all-directions.png";
+import tapImg from "./tap.png";
 import "./style.css";
 
 const levels = {
@@ -28,6 +30,8 @@ const levels = {
 
 const ANIM_DURATION = 100;
 const MIX_DURATION = 1000;
+
+const isTouch = "touchstart" in window || !!navigator.maxTouchPoints;
 
 const options = Object.keys(levels).map((lev) => ({
   value: lev,
@@ -50,6 +54,7 @@ export default function App() {
   const [isEnd, setIsEnd] = useState(false);
   const [time, setTime] = useState(0);
   const [isShownLeaderboard, setIsShownLeaderboard] = useState(false);
+  const [isShownInstructions, setIsShownInstructions] = useState(isTouch);
 
   const defaultName = useRef(localStorage.getItem("playerName"));
 
@@ -116,6 +121,7 @@ export default function App() {
     setIsEnd(false);
     setTime(0);
     setIsShownLeaderboard(false);
+    setIsShownInstructions(false);
     setOwnId("");
     restart();
   };
@@ -175,6 +181,30 @@ export default function App() {
           alt="bg"
           onLoad={() => setLoading(false)}
         />
+
+        {isShownInstructions && (
+          <div role="button" className="instruction" onTouchStart={() => setIsShownInstructions(false)}>
+            <h2>Sort all numbers</h2>
+
+            <div className="instruction__images">
+              <div className="instruction__image">
+                <span className="instruction__image-title">
+                  Swipe{"\n"}to{"\n"}move
+                </span>
+                <img src={swipeImg} alt="swipe" />
+              </div>
+              <div className="instruction__or">Or</div>
+              <div className="instruction__image">
+                <span className="instruction__image-title">
+                  Tap{"\n"}on{"\n"}tails
+                </span>
+                <img src={tapImg} alt="tap" />
+              </div>
+            </div>
+
+            <h2>Tap to start</h2>
+          </div>
+        )}
 
         <header>
           <h1>Fifteen Game</h1>

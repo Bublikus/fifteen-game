@@ -183,6 +183,8 @@ section button:empty {
   white-space: pre-wrap;
 }
 
+/* leaderboard */
+
 .strong {
   font-weight: bold;
 }
@@ -246,6 +248,68 @@ section button:empty {
 .leaderboard thead th {
   padding-bottom: 10px;
 }
+
+/* leaderboard */
+
+/* instructions */
+
+.instruction {
+  position: fixed;
+  overflow: hidden;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 9;
+  color: white;
+  font-size: 16px;
+}
+
+.instruction h2 {
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.instruction .instruction__images {
+  display: flex;
+  gap: 16px;
+  padding: 50px 0 70px 0;
+}
+
+.instruction .instruction__or {
+  padding: 6px 0;
+  transform: translateX(-20px);
+}
+
+.instruction .instruction__image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.instruction .instruction__image:first-child .instruction__image-title {
+  padding-right: 50px;
+}
+
+.instruction .instruction__image-title {
+  font-size: 14px;
+  font-weight: 700;
+  padding-bottom: 10px;
+  text-align: center;
+  width: min-content;
+  white-space: pre-line;
+}
+
+.instruction .instruction__image img {
+  width: auto;
+  height: 200px;
+}
+
+/* instructions */
 
 @media screen and (max-width: 374px) {
   h1, h2, h3, h4, h5, h6 {
