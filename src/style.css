@@ -118,6 +118,10 @@ footer {
   padding-top: 20px;
   padding-bottom: 70px;
 }
+
+.invisible {
+  visibility: hidden;
+}
 /* extra */
 
 header h3 {
@@ -225,6 +229,7 @@ section button:empty {
 
 .leaderboard td {
   font-size: 16px;
+  white-space: nowrap;
 }
 
 .leaderboard thead th {

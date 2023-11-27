@@ -39,9 +39,9 @@ const options = Object.keys(levels).map((lev) => ({
 }));
 
 export const getTime = (time) =>
-  `${String(Math.floor(time / 60)).padStart(2, "0")}:${String(
-    time % 60
-  ).padStart(2, "0")}`;
+  `${String(Math.floor(time / 60) || "").padStart(2, "_")}:${String(
+    time % 60 || ""
+  ).padStart(2, Math.floor(time / 60) ? "0" : "_")}`;
 
 export default function App() {
   const timerRef = useRef(0);
@@ -76,7 +76,7 @@ export default function App() {
 
         while (true) {
           const player = prompt(
-            `⏱️Time: ${getTime(time)}\n👤Enter your name: `,
+            `Time: ⏱️${getTime(time)}\n👤Enter your name: `,
             defaultName.current ?? undefined
           );
 
@@ -109,8 +109,17 @@ export default function App() {
       resolve();
     });
 
-  const { rows, cols, empty, cells, setRows, setCols, onCellClick, restart, startTime } =
-    useFifteenGame(onSuccess, { rows: level.rows, cols: level.cols });
+  const {
+    rows,
+    cols,
+    empty,
+    cells,
+    setRows,
+    setCols,
+    onCellClick,
+    restart,
+    startTime,
+  } = useFifteenGame(onSuccess, { rows: level.rows, cols: level.cols });
 
   const onChangeLevel = (levOption) => {
     const lev = levOption.value;
@@ -173,6 +182,18 @@ export default function App() {
     };
   }, []);
 
+  const getPrize = (i) => {
+    if (i === 0) {
+      return "🥇";
+    } else if (i === 1) {
+      return "🥈";
+    } else if (i === 2) {
+      return "🥉";
+    } else {
+      return "";
+    }
+  };
+
   return (
     <>
       {loading && <p className="loading">loading...</p>}
@@ -185,7 +206,11 @@ export default function App() {
         />
 
         {isShownInstructions && (
-          <div role="button" className="instruction" onTouchStart={() => setIsShownInstructions(false)}>
+          <div
+            role="button"
+            className="instruction"
+            onTouchStart={() => setIsShownInstructions(false)}
+          >
             <h2>How to play</h2>
 
             <div className="instruction__images">
@@ -222,7 +247,7 @@ export default function App() {
             </label>
           </h3>
           <h3>
-            ⏱️Time: <span>{getTime(time)}</span>
+            Time: <span>⏱️{getTime(time)}</span>
           </h3>
         </header>
 
@@ -257,9 +282,12 @@ export default function App() {
                       <td>
                         {leader.id === ownId ? "→ " : ""}
                         {i + 1}
+                        <span>
+                          {getPrize(i) || <span className="invisible">🥉</span>}
+                        </span>
                       </td>
                       <td>{leader.player.slice(0, 20).padEnd(20, ".")}</td>
-                      <td>{getTime(leader.time)}</td>
+                      <td>⏱️{getTime(leader.time)}</td>
                     </tr>
                   ))}
                 </tbody>
