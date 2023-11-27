@@ -23,6 +23,7 @@ body {
 }
 
 #root {
+  position: relative;
   flex: 1 0 auto;
   min-width: 100%;
   display: flex;
@@ -49,7 +50,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 main {
-  position: relative;
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
@@ -80,7 +80,7 @@ body {
 }
 
 .bg {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: -1;
   width: 100%;
@@ -91,7 +91,7 @@ body {
 }
 
 .loading {
-  position: fixed;
+  position: absolute;
   inset: 0;
   display: flex;
   justify-content: center;
@@ -198,7 +198,7 @@ section button:empty {
 }
 
 .leaderboard {
-  position: fixed;
+  position: absolute;
   overflow: hidden;
   inset: 0;
   display: flex;
@@ -262,7 +262,7 @@ section button:empty {
 /* instructions */
 
 .instruction {
-  position: fixed;
+  position: absolute;
   overflow: hidden;
   inset: 0;
   display: flex;
