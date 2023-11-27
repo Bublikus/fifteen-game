@@ -116,15 +116,15 @@ export class TouchGestureHandler {
     if (isSwiping) {
       this.isSwiping = true;
 
-      this.swipeStartX = touchMoveX;
-      this.swipeStartY = touchMoveY;
-
       const swipeDirection = this.getSwipeDirection(
-        this.touchStartX,
-        this.touchStartY,
+        this.swipeStartX,
+        this.swipeStartY,
         touchMoveX,
         touchMoveY
       );
+
+      this.swipeStartX = touchMoveX;
+      this.swipeStartY = touchMoveY;
 
       this.actions[swipeDirection]?.(event);
     }
