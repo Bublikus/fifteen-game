@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import FlipMove from "react-flip-move";
 import Select from "react-select";
 import {
@@ -60,54 +60,61 @@ export default function App() {
 
   const sortedLeaders = leaders.sort((a, b) => a.time - b.time).slice(0, 10);
 
-  const onSuccess = useCallback((time) =>
-    new Promise(async (resolve) => {
-      setIsEnd(true);
-      trackGameWin(time, level);
+  const onSuccess = useCallback(
+    (time) =>
+      new Promise(async (resolve) => {
+        setIsEnd(true);
+        trackGameWin(time, level);
 
-      await new Promise((resolve) => setTimeout(resolve, 200));
+        await new Promise((resolve) => setTimeout(resolve, 200));
 
-      setIsShownLeaderboard(true);
+        setIsShownLeaderboard(true);
 
-      await new Promise((resolve) => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-      const promptPlayer = () => {
-        let playerName;
+        const promptPlayer = () => {
+          let playerName;
 
-        while (true) {
-          const player = prompt(
-            `Time: ⏱️${getTime(time)}\n👤Enter your name: `,
-            defaultName.current ?? undefined
-          );
+          while (true) {
+            const player = prompt(
+              `Time: ⏱️${getTime(time)}\n👤Enter your name: `,
+              defaultName.current ?? undefined
+            );
 
-          playerName = player?.trim().slice(0, 50);
+            playerName = player?.trim().slice(0, 50);
 
-          if (playerName !== null && playerName !== "") break;
+            if (playerName !== null && playerName !== "") break;
+          }
+
+          return playerName;
+        };
+
+        const oneHour = 60 * 60 * 1000;
+        if (time && !Number.isNaN(+time) && time < oneHour) {
+          const playerName = promptPlayer();
+
+          if (playerName) {
+            const playerId = await addPayerToLeaderboard(
+              playerName,
+              time,
+              level
+            );
+
+            localStorage.setItem("playerName", playerName);
+            defaultName.current = playerName;
+
+            if (playerId) setOwnId(playerId);
+
+            trackSignGame(playerName, time, level);
+
+            await getLeaderboard(level).then(setLeaders);
+          }
         }
 
-        return playerName;
-      };
-
-      const oneHour = 60 * 60 * 1000;
-      if (time && !Number.isNaN(+time) && time < oneHour) {
-        const playerName = promptPlayer();
-
-        if (playerName) {
-          const playerId = await addPayerToLeaderboard(playerName, time, level);
-
-          localStorage.setItem("playerName", playerName);
-          defaultName.current = playerName;
-
-          if (playerId) setOwnId(playerId);
-
-          trackSignGame(playerName, time, level);
-
-          await getLeaderboard(level).then(setLeaders);
-        }
-      }
-
-      resolve();
-    }), [level]);
+        resolve();
+      }),
+    [level]
+  );
 
   const {
     rows,
@@ -206,11 +213,7 @@ export default function App() {
         />
 
         {isShownInstructions && (
-          <div
-            role="button"
-            className="instruction"
-            onTouchStart={() => setIsShownInstructions(false)}
-          >
+          <div role="button" className="instruction" onClick={handleRestart}>
             <h2>How to play</h2>
 
             <div className="instruction__images">
