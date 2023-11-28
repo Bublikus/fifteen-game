@@ -9,6 +9,7 @@ export function useFifteenGame(solvedCallback, config) {
 
   const handlerRef = useRef();
   const startGameTimeRef = useRef(0);
+  const isEndGame = useRef(false);
 
   const [rows, setRows] = useState(ROWS);
   const [cols, setCols] = useState(COLS);
@@ -18,6 +19,7 @@ export function useFifteenGame(solvedCallback, config) {
 
   const resetGame = async () => {
     startGameTimeRef.current = 0;
+    isEndGame.current = false;
 
     const values = generateValues({ rows, cols, empty });
     const initial = shuffle(values, 100000);
@@ -58,7 +60,8 @@ export function useFifteenGame(solvedCallback, config) {
 
       setCells(newCells);
 
-      if (isValidResult(newCells)) {
+      if (isValidResult(newCells) && !isEndGame.current) {
+        isEndGame.current = true;
         const time = Math.floor((Date.now() - startGameTimeRef.current) / 1000);
         await solvedCallback?.(time);
       }
@@ -98,7 +101,8 @@ export function useFifteenGame(solvedCallback, config) {
 
     setCells(newCells);
 
-    if (isValidResult(newCells)) {
+    if (isValidResult(newCells) && !isEndGame.current) {
+      isEndGame.current = true;
       const time = Math.floor((Date.now() - startGameTimeRef.current) / 1000);
       await solvedCallback?.(time);
     }
