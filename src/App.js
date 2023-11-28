@@ -28,7 +28,7 @@ const levels = {
   },
 };
 
-const ANIM_DURATION = 100;
+const ANIM_DURATION = 200;
 const MIX_DURATION = 1000;
 
 const isTouch = "touchstart" in window || !!navigator.maxTouchPoints;
