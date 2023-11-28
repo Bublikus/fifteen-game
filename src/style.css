@@ -47,7 +47,12 @@ header {
   padding-bottom: 20px;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-size: 16px;
 }
 
@@ -78,7 +83,7 @@ header h3 {
 }
 
 body {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
 }
 
 .bg {
@@ -152,7 +157,11 @@ section {
   border-radius: 4px;
 }
 
-section button {
+section .tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   border-radius: 0;
   padding: 0;
   font-size: 24px;
@@ -173,7 +182,7 @@ section button {
   outline: none;
 }
 
-section button:empty {
+section .tile:empty {
   visibility: hidden;
 }
 
@@ -188,7 +197,7 @@ section button:empty {
   gap: 8px;
   font-size: 18px;
   line-height: 1;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "Times New Roman", Times, serif;
 }
 
 .help div {
@@ -327,7 +336,12 @@ section button:empty {
 /* instructions */
 
 @media screen and (max-width: 374px) {
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-size: 14px;
   }
 
@@ -370,4 +384,3 @@ section button:empty {
     font-size: 13px;
   }
 }
-

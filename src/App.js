@@ -257,9 +257,14 @@ export default function App() {
         <section style={{ "--rows": rows, "--cols": cols }}>
           <FlipMove typeName={null} duration={duration} easing="ease-out">
             {cells.map((cell) => (
-              <button key={cell} onClick={onCellClick.bind(null, cell)}>
+              <div
+                key={cell}
+                role="button"
+                className="tile"
+                onClick={onCellClick.bind(null, cell)}
+              >
                 {cell === empty ? "" : cell}
-              </button>
+              </div>
             ))}
           </FlipMove>
         </section>
