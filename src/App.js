@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import FlipMove from "react-flip-move";
 import Select from "react-select";
 import {
@@ -60,7 +60,7 @@ export default function App() {
 
   const sortedLeaders = leaders.sort((a, b) => a.time - b.time).slice(0, 10);
 
-  const onSuccess = (time) =>
+  const onSuccess = useCallback((time) =>
     new Promise(async (resolve) => {
       setIsEnd(true);
       trackGameWin(time, level);
@@ -107,7 +107,7 @@ export default function App() {
       }
 
       resolve();
-    });
+    }), [level]);
 
   const {
     rows,
