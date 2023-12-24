@@ -54,7 +54,7 @@
 
 .leaderboard th:last-child,
 .leaderboard td:last-child {
-  text-align: right;
+  text-align: left;
   padding-left: 10px;
   width: 50px;
 }
