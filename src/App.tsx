@@ -124,7 +124,8 @@ export default function App() {
   const onPlayerModalClose = async (playerName: string) => {
     setShowPlayerModal(false);
 
-    if (time && playerName) {
+    const oneHour = 60 * 60 * 1000;
+    if (time && !Number.isNaN(+time) && time < oneHour) {
       const playerId = await addPayerToLeaderboard(playerName, time, level);
       if (playerId) setPlayer((prev) => ({ ...prev, id: playerId }));
       trackSignGame(playerName, time, level);
