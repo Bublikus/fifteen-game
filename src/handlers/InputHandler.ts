@@ -5,10 +5,6 @@ type InputHandlerActions = Partial<
 type InputHandlerConfig = TouchGestureHandlerConfig & DesktopInputHandlerConfig;
 
 export class InputHandler {
-  private actions: InputHandlerActions = {};
-
-  private isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints;
-
   private touchHandler: TouchGestureHandler | undefined;
   private desktopHandler: DesktopInputHandler | undefined;
 
@@ -18,6 +14,10 @@ export class InputHandler {
     } else {
       this.desktopHandler = new DesktopInputHandler(config);
     }
+  }
+
+  get isTouch(): boolean {
+    return Boolean("ontouchstart" in window || navigator.maxTouchPoints);
   }
 
   public handleActions(actions: InputHandlerActions): InputHandler {
@@ -35,13 +35,13 @@ export class InputHandler {
 // Mobile
 
 type TouchActionKeys =
-  | 'tap'
-  | 'doubleTap'
-  | 'longTap'
-  | 'swipeUp'
-  | 'swipeDown'
-  | 'swipeLeft'
-  | 'swipeRight';
+  | "tap"
+  | "doubleTap"
+  | "longTap"
+  | "swipeUp"
+  | "swipeDown"
+  | "swipeLeft"
+  | "swipeRight";
 
 export type TouchGestureHandlerActions = Partial<
   Record<TouchActionKeys, (e: TouchEvent) => void>
@@ -87,11 +87,11 @@ export class TouchGestureHandler {
   public handleActions(actions: TouchGestureHandlerActions) {
     this.actions = actions;
     // @ts-ignore
-    this.element.addEventListener('touchstart', this.handleTouchStart, false);
+    this.element.addEventListener("touchstart", this.handleTouchStart, false);
     // @ts-ignore
-    this.element.addEventListener('touchmove', this.handleTouchMove, false);
+    this.element.addEventListener("touchmove", this.handleTouchMove, false);
     // @ts-ignore
-    this.element.addEventListener('touchend', this.handleTouchEnd, false);
+    this.element.addEventListener("touchend", this.handleTouchEnd, false);
   }
 
   private handleTouchStart(event: TouchEvent) {
@@ -110,8 +110,10 @@ export class TouchGestureHandler {
     const touchMoveY = event.touches[0].clientY;
 
     const isSwiping =
-      Math.abs(touchMoveX - this.swipeStartX) > (this.isSwiping ? this.swipeTickThresholdPX : 20) ||
-      Math.abs(touchMoveY - this.swipeStartY) > (this.isSwiping ? this.swipeTickThresholdPX : 20);
+      Math.abs(touchMoveX - this.swipeStartX) >
+        (this.isSwiping ? this.swipeTickThresholdPX : 20) ||
+      Math.abs(touchMoveY - this.swipeStartY) >
+        (this.isSwiping ? this.swipeTickThresholdPX : 20);
 
     if (isSwiping) {
       this.isSwiping = true;
@@ -135,7 +137,7 @@ export class TouchGestureHandler {
     const touchEndY = event.changedTouches[0].clientY;
     const touchDuration = Date.now() - this.touchStartTime;
     const timeSinceLastTap = Date.now() - this.lastTapTime;
-    const isDoubleTapHandler = typeof this.actions.doubleTap === 'function';
+    const isDoubleTapHandler = typeof this.actions.doubleTap === "function";
     const isHold =
       Math.abs(touchEndX - this.touchStartX) < 10 &&
       Math.abs(touchEndY - this.touchStartY) < 10;
@@ -177,47 +179,47 @@ export class TouchGestureHandler {
     const deltaY = y2 - y1;
 
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
-      return deltaX > 0 ? 'swipeRight' : 'swipeLeft';
+      return deltaX > 0 ? "swipeRight" : "swipeLeft";
     } else {
-      return deltaY > 0 ? 'swipeDown' : 'swipeUp';
+      return deltaY > 0 ? "swipeDown" : "swipeUp";
     }
   }
 
   public destroy() {
     clearTimeout(this.singleClickTimeout);
     this.element.removeEventListener(
-      'touchstart',
+      "touchstart",
       // @ts-ignore
       this.handleTouchStart,
       false
     );
     // @ts-ignore
-    this.element.removeEventListener('touchmove', this.handleTouchMove, false);
+    this.element.removeEventListener("touchmove", this.handleTouchMove, false);
     // @ts-ignore
-    this.element.removeEventListener('touchend', this.handleTouchEnd, false);
+    this.element.removeEventListener("touchend", this.handleTouchEnd, false);
   }
 }
 
 // Desktop
 
 type DesktopActionKeys =
-  | 'click'
-  | 'longClick'
-  | 'doubleClick'
-  | 'rightClick'
-  | 'middleClick'
-  | 'scrollUp'
-  | 'scrollDown'
-  | 'scrollLeft'
-  | 'scrollRight'
-  | 'ArrowUp'
-  | 'ArrowDown'
-  | 'ArrowLeft'
-  | 'ArrowRight'
-  | 'Space'
-  | 'Enter'
-  | 'Escape'
-  | 'Tab';
+  | "click"
+  | "longClick"
+  | "doubleClick"
+  | "rightClick"
+  | "middleClick"
+  | "scrollUp"
+  | "scrollDown"
+  | "scrollLeft"
+  | "scrollRight"
+  | "ArrowUp"
+  | "ArrowDown"
+  | "ArrowLeft"
+  | "ArrowRight"
+  | "Space"
+  | "Enter"
+  | "Escape"
+  | "Tab";
 
 export type DesktopInputHandlerActions = Partial<
   Record<DesktopActionKeys, (e: KeyboardEvent | MouseEvent) => void>
@@ -225,20 +227,25 @@ export type DesktopInputHandlerActions = Partial<
 
 type DesktopInputHandlerConfig = {
   el?: HTMLElement | Document;
+  fireKeyHoldPerFrame?: boolean;
 };
 
 export class DesktopInputHandler {
   private element: HTMLElement | Document;
   private actions: DesktopInputHandlerActions = {};
+  private shouldFireKeyHoldPerFrame: boolean;
   private longClickDuration: number;
   private doubleClickDuration: number;
   private longClickTimeout?: number;
   private lastClickTime: number;
   private lastScrollTop: number = 0;
   private lastScrollLeft: number = 0;
+  private heldKeys: Set<string> = new Set();
+  private animationFrameRequest: number | undefined;
 
   constructor(config: DesktopInputHandlerConfig = {}) {
     this.element = config.el ?? document;
+    this.shouldFireKeyHoldPerFrame = config.fireKeyHoldPerFrame ?? false;
     this.longClickDuration = 500;
     this.doubleClickDuration = 200;
     this.lastClickTime = 0;
@@ -246,15 +253,24 @@ export class DesktopInputHandler {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleMouseEvents = this.handleMouseEvents.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.handleKeyHold = this.handleKeyHold.bind(this);
 
     // @ts-ignore
-    this.element.addEventListener('keydown', this.handleKeyDown);
+    this.element.addEventListener("keydown", this.handleKeyDown);
     // @ts-ignore
-    this.element.addEventListener('mousedown', this.handleMouseEvents);
+    this.element.addEventListener("keyup", this.handleKeyUp);
     // @ts-ignore
-    this.element.addEventListener('mouseup', this.handleMouseEvents);
+    this.element.addEventListener("mousedown", this.handleMouseEvents);
     // @ts-ignore
-    this.element.addEventListener('scroll', this.handleScroll);
+    this.element.addEventListener("mouseup", this.handleMouseEvents);
+    // @ts-ignore
+    this.element.addEventListener("scroll", this.handleScroll);
+
+    if (this.shouldFireKeyHoldPerFrame) {
+      // Start the animation loop
+      this.animationFrameRequest = requestAnimationFrame(this.handleKeyHold);
+    }
   }
 
   public handleActions(actions: DesktopInputHandlerActions): void {
@@ -263,47 +279,68 @@ export class DesktopInputHandler {
 
   private handleKeyDown(event: KeyboardEvent): void {
     this.actions[event.code as keyof typeof this.actions]?.(event);
+
+    if (this.shouldFireKeyHoldPerFrame) {
+      this.heldKeys.add(event.code);
+    }
+  }
+
+  private handleKeyUp(event: KeyboardEvent): void {
+    if (this.shouldFireKeyHoldPerFrame) {
+      this.heldKeys.delete(event.code);
+    }
+  }
+
+  private handleKeyHold(): void {
+    this.heldKeys.forEach((key) => {
+      this.actions[key as keyof typeof this.actions]?.({
+        type: "keydown",
+        code: key,
+      } as KeyboardEvent);
+    });
+
+    this.animationFrameRequest = requestAnimationFrame(this.handleKeyHold); // Continue the loop
   }
 
   private handleMouseEvents(event: MouseEvent): void {
-    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints;
+    const isTouch = "ontouchstart" in window || navigator.maxTouchPoints;
     if (isTouch) return;
 
     let actionKey: DesktopActionKeys | undefined;
 
     switch (event.type) {
-      case 'mousedown':
+      case "mousedown":
         if (event.button === 0) {
           const now = Date.now();
 
           if (now - this.lastClickTime < this.doubleClickDuration) {
-            actionKey = 'doubleClick';
+            actionKey = "doubleClick";
             this.lastClickTime = 0;
             clearTimeout(this.longClickTimeout);
           } else {
             this.lastClickTime = now;
             this.longClickTimeout = window.setTimeout(() => {
               if (now === this.lastClickTime) {
-                actionKey = 'longClick';
+                actionKey = "longClick";
                 this.actions[actionKey]?.(event);
               }
             }, this.longClickDuration);
           }
         } else if (event.button === 1) {
-          actionKey = 'middleClick';
+          actionKey = "middleClick";
         } else if (event.button === 2) {
-          actionKey = 'rightClick';
+          actionKey = "rightClick";
         }
         break;
 
-      case 'mouseup':
+      case "mouseup":
         if (event.button === 0) {
           clearTimeout(this.longClickTimeout);
           if (
             Date.now() - this.lastClickTime < this.longClickDuration &&
-            actionKey !== 'doubleClick'
+            actionKey !== "doubleClick"
           ) {
-            actionKey = 'click';
+            actionKey = "click";
           }
         }
         break;
@@ -327,15 +364,15 @@ export class DesktopInputHandler {
         : this.element.scrollLeft;
 
     if (scrollTop > this.lastScrollTop) {
-      actionKey = 'scrollDown';
+      actionKey = "scrollDown";
     } else if (scrollTop < this.lastScrollTop) {
-      actionKey = 'scrollUp';
+      actionKey = "scrollUp";
     }
 
     if (scrollLeft > this.lastScrollLeft) {
-      actionKey = 'scrollRight';
+      actionKey = "scrollRight";
     } else if (scrollLeft < this.lastScrollLeft) {
-      actionKey = 'scrollLeft';
+      actionKey = "scrollLeft";
     }
 
     this.lastScrollTop = scrollTop;
@@ -349,13 +386,19 @@ export class DesktopInputHandler {
   public destroy() {
     clearTimeout(this.longClickTimeout);
 
+    if (this.animationFrameRequest) {
+      cancelAnimationFrame(this.animationFrameRequest);
+    }
+
     // @ts-ignore
-    this.element.removeEventListener('keydown', this.handleKeyDown);
+    this.element.removeEventListener("keydown", this.handleKeyDown);
     // @ts-ignore
-    this.element.removeEventListener('mousedown', this.handleMouseEvents);
+    this.element.removeEventListener("keyup", this.handleKeyUp);
     // @ts-ignore
-    this.element.removeEventListener('mouseup', this.handleMouseEvents);
+    this.element.removeEventListener("mousedown", this.handleMouseEvents);
     // @ts-ignore
-    this.element.removeEventListener('scroll', this.handleScroll);
+    this.element.removeEventListener("mouseup", this.handleMouseEvents);
+    // @ts-ignore
+    this.element.removeEventListener("scroll", this.handleScroll);
   }
 }

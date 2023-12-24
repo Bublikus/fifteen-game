@@ -1,0 +1,87 @@
+.react-responsive-modal-modal {
+  border-radius: 12px;
+  border: 4px solid #333;
+  box-shadow: inset -4px -4px rgba(0, 0, 0, 0.25);
+}
+
+.player-modal__form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.player-modal__form-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.player-modal__footer,
+.player-modal__score,
+.player-modal__name-title {
+  padding: 0;
+}
+
+.player-modal__score {
+  font-size: 24px;
+}
+
+.player-modal__score-title {
+  padding-bottom: 20px;
+  font-size: 18px;
+  margin: 0;
+}
+
+.player-modal__name-title {
+  font-size: 18px;
+  margin: 0;
+  padding-bottom: 4px;
+}
+
+.player-modal__input {
+  font-size: 22px;
+  text-align: center;
+  padding: 7px 0;
+  border-radius: 4px;
+  border: 2px solid lightgray;
+  box-shadow: inset 2px 2px rgba(0, 0, 0, 0.25);
+}
+
+.player-modal__input:focus {
+  border: 2px solid #039be5;
+}
+
+.player-modal__footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+}
+
+.player-modal__footer-button {
+  height: 40px;
+  font-size: 18px;
+  font-weight: bold;
+  font-family: "Courier New", Courier, monospace;
+  padding: 2px 20px;
+  background-color: #039be5;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  border: 2px solid #333333;
+  box-shadow: inset -4px -4px rgba(0, 0, 0, 0.25),
+    inset 2px 2px rgba(255, 255, 255, 0.25);
+}
+
+.player-modal__footer-button:hover,
+.player-modal__footer-button:focus-visible {
+  box-shadow: inset -2px -2px rgba(0, 0, 0, 0.25);
+}
+
+.player-modal__footer-button:active {
+  box-shadow: inset 2px 2px rgba(0, 0, 0, 0.25);
+}

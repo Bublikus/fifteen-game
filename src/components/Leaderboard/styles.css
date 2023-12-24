@@ -1,0 +1,70 @@
+.strong {
+  font-weight: bold;
+}
+
+.leaderboard {
+  position: absolute;
+  overflow: hidden;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 9;
+  color: white;
+}
+
+.leaderboard-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border: 6px solid #333333;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: inset -4px -4px rgba(0, 0, 0, 0.25);
+}
+
+.leaderboard td {
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.leaderboard thead th {
+  border-bottom: 1px solid white;
+}
+
+.leaderboard tbody tr:first-child td {
+  padding-top: 10px;
+}
+
+.leaderboard h3 {
+  padding-bottom: 20px;
+}
+
+.leaderboard th:first-child,
+.leaderboard td:first-child {
+  text-align: right;
+  padding-right: 10px;
+  width: 20px;
+}
+
+.leaderboard th:last-child,
+.leaderboard td:last-child {
+  text-align: right;
+  padding-left: 10px;
+  width: 50px;
+}
+
+.leaderboard thead th {
+  padding-bottom: 10px;
+}
+
+@media screen and (max-width: 374px) {
+  .leaderboard td {
+    font-size: 14px;
+  }
+}

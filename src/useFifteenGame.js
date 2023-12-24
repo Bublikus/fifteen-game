@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { InputHandler } from './InputHandler';
+import { InputHandler } from './handlers/InputHandler';
 import {trackGameStart} from './firebase';
 
 export function useFifteenGame(solvedCallback, config) {
