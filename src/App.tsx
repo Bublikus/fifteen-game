@@ -67,7 +67,7 @@ export default function App() {
   const isOverlay = useRef(false);
 
   // @ts-ignore
-  const [level, setLevel] = useState(levels[Object.keys(levels)[0]]);
+  const [level, setLevel] = useState<keyof typeof levels>(Object.keys(levels)[0]);
   const [duration, setDuration] = useState(MIX_DURATION);
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [player, setPlayer] = useState<Leader>(defaultPlayer);
@@ -101,7 +101,7 @@ export default function App() {
     onCellClick,
     restart,
     startTime,
-  } = useFifteenGame(onSuccess, { rows: level.rows, cols: level.cols });
+  } = useFifteenGame(onSuccess, { rows: levels[level].rows, cols: levels[level].cols });
 
   const onChangeLevel = (levOption: any) => {
     const lev = levOption.value;
