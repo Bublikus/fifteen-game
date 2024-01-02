@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import {getTime} from '../../App';
+import { getTime } from "../../App";
 import { Leader } from "../../firebase";
 import "./styles.css";
 
@@ -11,12 +11,12 @@ interface LeaderboardProps {
   onClose(): void;
 }
 
-const emptyPlayer: Omit<Leader, 'id'> = {
-  player: '',
-  time: '' as unknown as number,
-  level: '' as unknown as string,
-  date: '',
-}
+const emptyPlayer: Omit<Leader, "id"> = {
+  player: "",
+  time: "" as unknown as number,
+  level: "" as unknown as string,
+  date: "",
+};
 
 export const Leaderboard: React.FC<LeaderboardProps> = ({
   open,
@@ -28,10 +28,10 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
 
-  const sortedLeaders = [...leaders].slice(0, 10)
+  const sortedLeaders = [...leaders].slice(0, 10);
   const paddedLeaders = [...Array(10 - sortedLeaders.length).fill(emptyPlayer)]
     .concat(sortedLeaders)
-    .sort((a, b) => (!b.time ? -1 : a.time - b.time))
+    .sort((a, b) => (!b.time ? -1 : a.time - b.time));
 
   const getPrize = (i: number) => {
     if (i === 0) {
