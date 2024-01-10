@@ -41,7 +41,10 @@ type TouchActionKeys =
   | "swipeUp"
   | "swipeDown"
   | "swipeLeft"
-  | "swipeRight";
+  | "swipeRight"
+  | "touchstart"
+  | "touchmove"
+  | "touchend";
 
 export type TouchGestureHandlerActions = Partial<
   Record<TouchActionKeys, (e: TouchEvent) => void>
@@ -95,6 +98,7 @@ export class TouchGestureHandler {
   }
 
   private handleTouchStart(event: TouchEvent) {
+    this.actions["touchstart"]?.(event);
     this.touchStartX = event.touches[0].clientX;
     this.touchStartY = event.touches[0].clientY;
     this.swipeStartX = event.touches[0].clientX;
@@ -104,6 +108,8 @@ export class TouchGestureHandler {
   }
 
   private handleTouchMove(event: TouchEvent) {
+    this.actions["touchmove"]?.(event);
+
     if (!this.swipeTickThresholdPX && this.isSwiping) return;
 
     const touchMoveX = event.touches[0].clientX;
@@ -133,6 +139,8 @@ export class TouchGestureHandler {
   }
 
   private handleTouchEnd(event: TouchEvent) {
+    this.actions["touchend"]?.(event);
+
     const touchEndX = event.changedTouches[0].clientX;
     const touchEndY = event.changedTouches[0].clientY;
     const touchDuration = Date.now() - this.touchStartTime;
